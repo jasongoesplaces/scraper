@@ -83,7 +83,7 @@ router.get('/articles', function(req, res) {
 });
 
 //clear all articles
-router.get('/clearAll', function(req, res) {
+router.get('/clear', function(req, res) {
     Article.remove({}, function(err, doc) {
         if (err) {
             console.log(err);
