@@ -31,11 +31,11 @@ mongoose.connect(MONGODB_URI);
 
 
 
-// var db = mongoose.connection;
-// db.on('error', console.error.bind(console, 'connection error:'));
-// db.once('open', () => {
-//   console.log('Connected to Mongo')
-// });
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', () => {
+  console.log('Connected to Mongo')
+});
 
 var routes = require('./controller/controller.js');
 app.use('/', routes);
