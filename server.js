@@ -28,9 +28,7 @@ var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/articles";
 // Connect to the Mongo DB
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI);
-// mongoose.connect('mongodb://technews:scraper23#45!12@ds117061.mlab.com:17061/heroku_4grstpxg');
 
-// mongoose.connect('mongodb://localhost/articles');
 
 
 var db = mongoose.connection;
