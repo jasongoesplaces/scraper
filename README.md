@@ -17,7 +17,7 @@ The app can be found by clicking [here!](https://technewsscraper.herokuapp.com/a
 ### Screenshots
 
 Home Page
-![screenshot](assets/screenshots/home.png "Home Page")
+![screenshot](public/assets/img/home.png "Home Page")
 
 Article Page
-![screenshot](assets/screenshots/article.png "Article Page")
+![screenshot](public/assets/img/article.png "Article Page")
