@@ -2,47 +2,54 @@
 var express = require('express');
 var router = express.Router();
 var path = require('path');
+
+//require request and cheerio to scrape
 var request = require('request');
 var cheerio = require('cheerio');
 
-//require models
+//Require models
 var Comment = require('../models/Comment.js');
 var Article = require('../models/Article.js');
 
 //index
-router.get('/', (req, res) => {
+router.get('/', function(req, res) {
     res.redirect('/articles');
 });
 
-//GET request to scrape for articles
-router.get('/scrape', (req, res) => {
-    request('http://www.theverge.com/tech', (error, response, html) => {
+// A GET request to scrape the Verge website
+router.get('/scrape', function(req, res) {
+    // First, we grab the body of the html with request
+    request('http://www.theverge.com/tech', function(error, response, html) {
+        // Then, we load that into cheerio and save it to $ for a shorthand selector
         var $ = cheerio.load(html);
         var titlesArray = [];
-        $('.c-entry-box--compact__title').each((i, element) => {
+        // Now, we grab every article
+        $('.c-entry-box--compact__title').each(function(i, element) {
+            // Save an empty result object
             var result = {};
 
-            // add title and link to result
+            // Add the text and href of every link, and save them as properties of the result object
             result.title = $(this).children('a').text();
             result.link = $(this).children('a').attr('href');
 
-            // makes sure no duplicates are sent to the database
+            //ensures that no empty title or links are sent to mongodb
             if(result.title !== "" && result.link !== ""){
               //check for duplicates
               if(titlesArray.indexOf(result.title) == -1){
 
-                // push title to array 
+                // push the saved title to the array 
                 titlesArray.push(result.title);
 
-                // only adds article if not already there
-                Article.count({ title: result.title}, (err, test) => {
+                // only add the article if is not already there
+                Article.count({ title: result.title}, function (err, test){
+                    //if the test is 0, the entry is unique and good to save
                   if(test == 0){
 
-                    //create new object with Article model
+                    //using Article model, create new object
                     var entry = new Article (result);
 
-                    //save to database
-                    entry.save((err, doc) => {
+                    //save entry to mongodb
+                    entry.save(function(err, doc) {
                       if (err) {
                         console.log(err);
                       } else {
@@ -53,26 +60,28 @@ router.get('/scrape', (req, res) => {
                   }
             });
         }
+        // Log that scrape is working, just the content was missing parts
         else{
-          console.log('Article already scraped.')
+          console.log('Article already exists.')
         }
 
           }
+          // Log that scrape is working, just the content was missing parts
           else{
-            console.log('Incomplete Data')
+            console.log('Not saved to DB, missing data')
           }
         });
-        // redirect to index
+        // after scrape, redirects to index
         res.redirect('/');
     });
 });
 
-//populates the page with the scraped articles
-router.get('/articles', (req, res) => {
-    //newer articles on top
+//this will grab every article an populate the DOM
+router.get('/articles', function(req, res) {
+    //allows newer articles to be on top
     Article.find().sort({_id: -1})
         //send to handlebars
-        .exec((err, doc) => {
+        .exec(function(err, doc) {
             if(err){
                 console.log(err);
             } else{
@@ -82,20 +91,20 @@ router.get('/articles', (req, res) => {
     });
 });
 
-// get route for finding the json data for the articles
+// This will get the articles we scraped from the mongoDB in JSON
 router.get('/articles-json', function(req, res) {
-  Article.find({}, function(err, doc) {
-      if (err) {
-          console.log(err);
-      } else {
-          res.json(doc);
-      }
-  });
+    Article.find({}, function(err, doc) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.json(doc);
+        }
+    });
 });
 
 //clear all articles
-router.get('/clear', (req, res) => {
-    Article.remove({}, (err, doc) => {
+router.get('/clearAll', function(req, res) {
+    Article.remove({}, function(err, doc) {
         if (err) {
             console.log(err);
         } else {
@@ -106,31 +115,31 @@ router.get('/clear', (req, res) => {
     res.redirect('/');
 });
 
-router.get('/articles/:id', (req, res) => {
+router.get('/readArticle/:id', function(req, res){
   var articleId = req.params.id;
   var hbsObj = {
     article: [],
     body: []
   };
 
-    //find article by id
+    // //find the article at the id
     Article.findOne({ _id: articleId })
       .populate('comment')
-      .exec((err, doc) => {
+      .exec(function(err, doc){
       if(err){
         console.log('Error: ' + err);
       } else {
         hbsObj.article = doc;
         var link = doc.link;
-        //get article content
-        request(link, (error, response, html) => {
+        //grab article from link
+        request(link, function(error, response, html) {
           var $ = cheerio.load(html);
 
-          $('.l-col__main').each((i, element) => {
+          $('.l-col__main').each(function(i, element){
             hbsObj.body = $(this).children('.c-entry-content').children('p').text();
-            //send article content and comments to article.handlbars
+            //send article body and comments to article.handlbars through hbObj
             res.render('article', hbsObj);
-            //prevents loop so it doesn't return empty
+            //prevents loop through so it doesn't return an empty hbsObj.body
             return false;
           });
         });
@@ -139,29 +148,30 @@ router.get('/articles/:id', (req, res) => {
     });
 });
 
-// POST route for leaving a comment
-router.post('/comment/:id', (req, res) => {
+// Create a new comment
+router.post('/comment/:id', function(req, res) {
   var user = req.body.name;
   var content = req.body.comment;
   var articleId = req.params.id;
 
   //submitted form
-  var comment = {
+  var commentObj = {
     name: user,
     body: content
   };
  
-  //create new comment with the Comment model
-  var newComment = new Comment(comment);
+  //using the Comment model, create a new comment
+  var newComment = new Comment(commentObj);
 
-  newComment.save((err, doc) => {
+  newComment.save(function(err, doc) {
       if (err) {
           console.log(err);
       } else {
           console.log(doc._id)
           console.log(articleId)
           Article.findOneAndUpdate({ "_id": req.params.id }, {$push: {'comment':doc._id}}, {new: true})
-            .exec((err, doc) => {
+            //execute everything
+            .exec(function(err, doc) {
                 if (err) {
                     console.log(err);
                 } else {
