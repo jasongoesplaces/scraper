@@ -21,9 +21,16 @@ app.engine('handlebars', exphbs({
 app.set('view engine', 'handlebars');
 
 //connecting to MongoDB
-// mongoose.connect('mongodb://heroku_jxkjhg1v:6s68tem51mlionrj2sneb7b53c@ds127988.mlab.com:27988/heroku_jxkjhg1v');
+// If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/articles";
 
-mongoose.connect('mongodb://localhost/articles');
+// Set mongoose to leverage built in JavaScript ES6 Promises
+// Connect to the Mongo DB
+mongoose.Promise = Promise;
+mongoose.connect(MONGODB_URI);
+// mongoose.connect('mongodb://technews:scraper23#45!12@ds117061.mlab.com:17061/heroku_4grstpxg');
+
+// mongoose.connect('mongodb://localhost/articles');
 
 
 var db = mongoose.connection;
