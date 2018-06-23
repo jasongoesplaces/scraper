@@ -82,6 +82,17 @@ router.get('/articles', (req, res) => {
     });
 });
 
+// get route for finding the json data for the articles
+router.get('/articles-json', function(req, res) {
+  Article.find({}, function(err, doc) {
+      if (err) {
+          console.log(err);
+      } else {
+          res.json(doc);
+      }
+  });
+});
+
 //clear all articles
 router.get('/clear', (req, res) => {
     Article.remove({}, (err, doc) => {
