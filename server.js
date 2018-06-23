@@ -31,16 +31,14 @@ mongoose.connect(MONGODB_URI);
 
 
 
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  console.log('Connected to Mongoose!')
-});
+// var db = mongoose.connection;
+// db.on('error', console.error.bind(console, 'connection error:'));
+// db.once('open', () => {
+//   console.log('Connected to Mongo')
+// });
 
 var routes = require('./controller/controller.js');
 app.use('/', routes);
 
-var port = process.env.PORT || 3000;
-app.listen(port, function(){
-  console.log('Listening on PORT ' + port);
-});
+var port = process.env.PORT || 8080;
+app.listen(port, () => console.log('Listening on PORT ' + port));
