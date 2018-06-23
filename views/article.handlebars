@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="row"> 
+    <h3 class="card">{{article.title}}</h3>
+    <h5 class="card-panel articleBody">{{body}}</h5>
+    
+  </div>
+
+
+  <div class="row">
+    <form action="/comment/{{article._id}}" method="POST" class="card-panel col s7">
+      <h5>Submit a Comment:</h5>
+        <div class="row">
+          <div class="input-field">
+            <i class="material-icons prefix">perm_identity</i>
+            <input id="icon_prefix" type="text" placeholder="Name" name="name" class="validate active">
+          </div>
+          <div class="input-field">
+            <i class="material-icons prefix">comment</i>
+            <input id="icon_telephone" type="text" placeholder="Comment" name="comment" class="validate active">
+          </div>
+        </div>
+        <!-- Submit Button -->
+        <div class="row">
+          <div class="input-field">
+          <center><input class="btn add-comment-button articleBtn" type="submit" value="Submit"></center>
+          </div>
+        </div>
+      </form>
+      <div class="col s1"></div>
+      <div class="col s4">
+        <h5 class="card-panel">Comments:</h5>
+          {{#if article.comment}}
+            {{#each article.comment}}
+              <div class="card">
+                <p class="comment">{{name}}</p>
+                <p class="commentBody">{{body}}<p>
+              </div>
+            {{/each}}
+            {{else}}
+            <p class="card-panel">No Comments Yet.</p>
+          {{/if}}
+      </div>
+    </div>
+  </div>
+</div>

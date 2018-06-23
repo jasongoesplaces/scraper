@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang ="en">
+  <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+    <title>Tech News Scraper</title>
+  </head>
+  <body>
+    <nav>
+      <div class="nav-wrapper">
+        <a href="/" class="brand-logo">Tech News Scraper</a>
+        <ul class="right" id="nav-mobile">
+          <li><a href="/scrape" class="waves-effect waves-light btn articleBtn">Scrape New Articles</a></li>
+          <li><a href="/clearAll" class="waves-effect waves-light btn articleBtn">Clear Articles</a></li>
+        </ul>
+      </div>
+    </nav>
+    
+    <main>
+        {{{ body }}}
+    </main>
+    <footer class="page-footer center">
+        Scraped from: <a href='http://www.theverge.com/' target="_blank">The Verge</a>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+    <script src="assets/js/main.js"></script>
+  </body>
+<html>

@@ -1,0 +1,71 @@
+body{
+  background: url('../img/background.jpg') repeat;
+  background-size: 600px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main{
+  flex: 1 0 auto;
+}
+
+nav {
+  background-color: white !important;
+}
+
+footer {
+  background-color: white !important;
+}
+
+footer a {
+  color: black;
+}
+
+.articleBody{
+  font-size: 20px;
+  line-height: 150%;
+}
+
+.comment{
+  font-weight: bold;
+  text-align: center;
+  background: #797979 !important;
+  color: white;
+}
+
+.commentBody {
+  text-align: center;
+}
+
+/* label focus color */
+.input-field input[type=text]:focus + label {
+ color: #797979 !important;
+}
+/* label underline focus color */
+.input-field input[type=text]:focus {
+ border-bottom: 1px solid #797979 !important;
+}
+/* icon prefix focus color */
+.input-field .prefix.active {
+ color: #797979 !important;
+}
+
+.parallaxText {
+  color: aliceblue
+}
+
+.articleBtn {
+  background: url('../img/background.jpg') !important;
+  color: black;
+}
+
+.brand-logo {
+  color: black !important;
+}
+
+.card-panel {
+  background-color: rgba(255, 255, 255, 0.945) !important;
+}
