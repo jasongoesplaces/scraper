@@ -7,7 +7,21 @@
 
 
   <div class="row">
-    <form action="/comment/{{article._id}}" method="POST" class="card-panel col s7">
+      <div class="col s4">
+        <h5 class="card-panel">Comments:</h5>
+          {{#if article.comment}}
+            {{#each article.comment}}
+              <div class="card">
+                <p class="comment">{{name}}</p>
+                <p class="commentBody">{{body}}<p>
+              </div>
+            {{/each}}
+            {{else}}
+            <p class="card-panel">No Comments Yet.</p>
+          {{/if}}
+      </div>
+      <div class="col s1"></div>
+      <form action="/comment/{{article._id}}" method="POST" class="card-panel col s7">
       <h5>Submit a Comment:</h5>
         <div class="row">
           <div class="input-field">
@@ -26,20 +40,6 @@
           </div>
         </div>
       </form>
-      <div class="col s1"></div>
-      <div class="col s4">
-        <h5 class="card-panel">Comments:</h5>
-          {{#if article.comment}}
-            {{#each article.comment}}
-              <div class="card">
-                <p class="comment">{{name}}</p>
-                <p class="commentBody">{{body}}<p>
-              </div>
-            {{/each}}
-            {{else}}
-            <p class="card-panel">No Comments Yet.</p>
-          {{/if}}
-      </div>
     </div>
   </div>
 </div>
